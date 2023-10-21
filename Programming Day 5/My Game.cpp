@@ -7,19 +7,22 @@ void print_enemy_1();
 void erase_enemy_1();
 void print_enemy_2();
 void erase_enemy_2();
+string changeDirection_1(string);
+string changeDirection_2(string);
 void print_player();
 void erase_player();
 void move_player_left();
 void move_player_right();
 void move_player_up ();
 void move_player_down ();
-void move_enemy_1();
-void move_enemy_2();
+void move_enemy_1(string);
+void move_enemy_2(string);
 void print_maze();
 
 int eX1 = 15 , eY1 = 1;
 int eX2 = 100, eY2 = 10;
 int pX = 1 , pY = 24;
+int bonus = 0;
 main ()
 {
     system ("cls");
@@ -27,6 +30,8 @@ main ()
     print_enemy_1 ();
     print_enemy_2 ();
     print_player ();
+    string enemyDirection_1 = "right";
+    string enemyDirection_2 = "down";
         while(true)
         {
         if (GetAsyncKeyState(VK_LEFT))
@@ -45,9 +50,13 @@ main ()
         {
             move_player_down();
         }
-        move_enemy_1();
+        gotoxy (10,30);
+        cout << "Bonus: " << bonus;
+        move_enemy_1(enemyDirection_1);
+        enemyDirection_1 = changeDirection_1(enemyDirection_1);
         Sleep (25);
-        move_enemy_2();
+        move_enemy_2(enemyDirection_2);
+        enemyDirection_2 = changeDirection_2(enemyDirection_2);
         Sleep (25);
         }
         return 0;
@@ -78,9 +87,9 @@ void print_maze ()
     cout << "#                                                                                                                      #" << endl;
     cout << "#                                                                                                                      #" << endl;
     cout << "#                                                                                                                      #" << endl;
-    cout << "#                                                                                                       ################" << endl;
+    cout << "#                                       $                                                               ################" << endl;
     cout << "#                                                                                                         ##############" << endl;
-    cout << "#                                                                                                          #############" << endl;
+    cout << "#                                    $                                                                     #############" << endl;
     cout << "#######################                                                                                                #" << endl;
     cout << "######################                                                                                                 #" << endl;
     cout << "#####################                              ###################                                                 #" << endl;
@@ -88,7 +97,7 @@ void print_maze ()
     cout << "#                                                  ###################                                                 #" << endl;
     cout << "#                                                                                                                      #" << endl;
     cout << "#                                                                                                                      #" << endl;
-    cout << "#                                                                                                                      #" << endl;
+    cout << "#                      $                                                                                               #" << endl;
     cout << "#                                                                                                                      #" << endl;
     cout << "#                                                                                                                      #" << endl;
     cout << "#                                                                                                                      #" << endl;
@@ -124,15 +133,57 @@ void erase_enemy_1 ()
     gotoxy (eX1 , eY1 + 4);
     cout << "           " << endl;
 }
-void move_enemy_1 ()
+string changeDirection_1(string direction)
+{
+
+    if (direction == "right" && eX1 >= 100)
+    {
+        direction = "left";
+    }
+    if (direction == "left" && eX1 <= 2)
+    {
+        direction = "right";
+    }
+    return direction;
+}
+string changeDirection_2(string direction)
+{
+
+    if (direction == "down" && eY2 >= 20)
+    {
+        direction = "up";
+    }
+    if (direction == "up" && eY2 <= 10)
+    {
+        direction = "down";
+    }
+    return direction;
+}
+void move_enemy_1 (string direction)
 {
     erase_enemy_1();
-    eX1 = eX1 + 1;
-    if (eX1 == 80)
+    if (direction == "right")
     {
-        eX1 = 15;
+        eX1 = eX1 + 1;
+    }
+    if (direction == "left")
+    {
+        eX1 = eX1 - 1;
     }
     print_enemy_1();
+}
+void move_enemy_2 (string direction)
+{
+    erase_enemy_2();
+    if (direction == "down")
+    {
+        eY2 = eY2 + 1;
+    }
+    if (direction == "up")
+    {
+        eY2 = eY2 - 1;
+    }
+    print_enemy_2();
 }
 void print_enemy_2()
 {
@@ -202,6 +253,13 @@ void print_player ()
 }
 void move_player_left() 
 {
+     if (getCharAtxy(pX - 1 , pY) == '$'  || getCharAtxy(pX - 1 , pY-1) == '$' || getCharAtxy(pX - 1, pY-2) == '$'||getCharAtxy(pX - 1, pY-3) == '$'||getCharAtxy(pX -1 , pY-4) == '$'||getCharAtxy(pX  - 1, pY-5) == '$'||getCharAtxy(pX - 1, pY-6) == '$')
+    {
+    erase_player();
+    bonus = bonus + 1;
+    pX = pX + 1 ;
+    print_player();
+    } 
     if (getCharAtxy(pX - 1 , pY) == ' ')
     {
     erase_player();
@@ -211,6 +269,13 @@ void move_player_left()
 }
 void move_player_right()
 {
+    if (getCharAtxy(pX + 11, pY) == '$'  || getCharAtxy(pX + 11, pY-1) == '$' || getCharAtxy(pX + 11, pY-2) == '$'||getCharAtxy(pX + 11, pY-3) == '$'||getCharAtxy(pX + 11, pY-4) == '$'||getCharAtxy(pX + 11, pY-5) == '$'||getCharAtxy(pX + 11, pY-6) == '$')
+    {
+    erase_player();
+    bonus = bonus + 1;
+    pX = pX + 1 ;
+    print_player();
+    } 
     if (getCharAtxy(pX + 11, pY) == ' ')
     {
     erase_player();
