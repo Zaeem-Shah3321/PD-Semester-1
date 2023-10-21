@@ -11,17 +11,17 @@ main (){
     for (int m = 1 ; m <= days ; m++)
     {
         if ((m % 3 == 0) && notTreated > treated)
-        doctors += 1;
+        doctors = doctors + 1;
         cout << "Number of patients who visited hospital on Day " << m << ": ";
         cin >> patients;
         if (patients > doctors)
         {
-            notTreated += (patients - doctors);
-            treated += doctors;
+            notTreated = notTreated + (patients - doctors);
+            treated = treated + doctors;
         }
         else if (patients <= doctors)
         {
-            treated += patients;
+            treated = treated + patients;
             notTreated += 0;
         }
     }
