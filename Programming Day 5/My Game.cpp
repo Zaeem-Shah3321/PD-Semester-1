@@ -18,11 +18,15 @@ void move_player_down ();
 void move_enemy_1(string);
 void move_enemy_2(string);
 void print_maze();
-
+void printfire();
+void movefire();
 int eX1 = 15 , eY1 = 1;
 int eX2 = 100, eY2 = 10;
 int pX = 1 , pY = 24;
 int bonus = 0;
+int fX = 0 , fY = 0;
+bool bullet = false;
+int enemyhealth2 = 3;
 main ()
 {
     system ("cls");
@@ -50,14 +54,27 @@ main ()
         {
             move_player_down();
         }
+        if (GetAsyncKeyState(VK_SPACE))
+        {
+            if (!bullet)
+            {
+            printfire();
+            bullet = true;
+            }
+        }
+        if (bullet)
+        {
+            movefire();
+
+        }
         gotoxy (10,30);
-        cout << "Bonus: " << bonus;
+        cout << "Bonus: " << enemyhealth2;
         move_enemy_1(enemyDirection_1);
         enemyDirection_1 = changeDirection_1(enemyDirection_1);
-        Sleep (25);
+        Sleep (1);
         move_enemy_2(enemyDirection_2);
         enemyDirection_2 = changeDirection_2(enemyDirection_2);
-        Sleep (25);
+        Sleep (1);
         }
         return 0;
     }
@@ -87,24 +104,24 @@ void print_maze ()
     cout << "#                                                                                                                      #" << endl;
     cout << "#                                                                                                                      #" << endl;
     cout << "#                                                                                                                      #" << endl;
-    cout << "#                                       $                                                               ################" << endl;
-    cout << "#                                                                                                         ##############" << endl;
-    cout << "#                                    $                                                                     #############" << endl;
-    cout << "#######################                                                                                                #" << endl;
-    cout << "######################                                                                                                 #" << endl;
-    cout << "#####################                              ###################                                                 #" << endl;
-    cout << "####################                               @@@@@@@@@@@@@@@@@@@                                                 #" << endl;
-    cout << "#                                                  ###################                                                 #" << endl;
-    cout << "#                                                                                                                      #" << endl;
-    cout << "#                                                                                                                      #" << endl;
-    cout << "#                      $                                                                                               #" << endl;
     cout << "#                                                                                                                      #" << endl;
     cout << "#                                                                                                                      #" << endl;
     cout << "#                                                                                                                      #" << endl;
     cout << "#                                                                                                                      #" << endl;
-    cout << "#                     # # # #                     # # # #                     # # # #                                  #" << endl;
-    cout << "#                     #     #                     #     #                     #     #                                  #" << endl;
-    cout << "#                     #     #                     #     #                     #     #                                  #" << endl;
+    cout << "#                                                                                                                      #" << endl;
+    cout << "#                                                                                                                      #" << endl;
+    cout << "#                                                                                                                      #" << endl;
+    cout << "#                                                                                                                      #" << endl;
+    cout << "#                                                                                                                      #" << endl;
+    cout << "#                                                                                                                      #" << endl;
+    cout << "#                                                                                                                      #" << endl;
+    cout << "#                                                                                                                      #" << endl;
+    cout << "#                                                                                                                      #" << endl;
+    cout << "#                                                                                                                      #" << endl;
+    cout << "#                                                                                                                      #" << endl;
+    cout << "#                                                                                                                      #" << endl;
+    cout << "#                                                                                                                      #" << endl;
+    cout << "#                                                                                                                      #" << endl;
     cout << "########################################################################################################################" << endl;
 }
 void print_enemy_1 ()
@@ -124,7 +141,7 @@ void erase_enemy_1 ()
 {
     gotoxy (eX1 , eY1);
     cout << "          " << endl;
-     gotoxy (eX1 , eY1 + 1);
+    gotoxy (eX1 , eY1 + 1);
     cout << "          " << endl;
     gotoxy (eX1 , eY1 + 2);
     cout << "          " << endl;
@@ -253,7 +270,7 @@ void print_player ()
 }
 void move_player_left() 
 {
-     if (getCharAtxy(pX - 1 , pY) == '$'  || getCharAtxy(pX - 1 , pY-1) == '$' || getCharAtxy(pX - 1, pY-2) == '$'||getCharAtxy(pX - 1, pY-3) == '$'||getCharAtxy(pX -1 , pY-4) == '$'||getCharAtxy(pX  - 1, pY-5) == '$'||getCharAtxy(pX - 1, pY-6) == '$')
+    if (getCharAtxy(pX - 1 , pY) == '$'  || getCharAtxy(pX - 1 , pY-1) == '$' || getCharAtxy(pX - 1, pY-2) == '$'||getCharAtxy(pX - 1, pY-3) == '$'||getCharAtxy(pX -1 , pY-4) == '$'||getCharAtxy(pX  - 1, pY-5) == '$'||getCharAtxy(pX - 1, pY-6) == '$')
     {
     erase_player();
     bonus = bonus + 1;
@@ -301,8 +318,36 @@ void move_player_down()
     print_player();
     }
 }
-
-
-
-    
-  
+void printfire()
+{
+    fX = pX + 12;
+    fY = pY - 3;
+    gotoxy(fX , fY);
+    cout << "!";
+    bullet = true;
+}
+void movefire()
+{
+    gotoxy (fX ,fY);
+    cout << " ";
+    if (getCharAtxy(fX + 1 , fY) == ' ')
+    {
+        fX += 1;
+        gotoxy(fX , fY);
+        cout << "!";
+    }
+    else if (getCharAtxy(fX + 1 , fY) == '/' || getCharAtxy(fX + 1 , fY) == '\\' || getCharAtxy(fX + 1 , fY) == '-' || getCharAtxy(fX + 1 , fY) == '_')
+    {
+        enemyhealth2--;
+        bullet = false;
+        if(enemyhealth2 == 0)
+        {
+            erase_enemy_2();
+            erase_enemy_1();
+        }
+    }
+    else 
+    {
+        bullet = false;
+    }
+}
